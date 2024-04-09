@@ -9,7 +9,11 @@ export class UserService {
 
     getUserById(id: User["resoniteUserId"]) {
         return this.prismaService.user.findUnique({
-            where: {id: id}
+            where: {id: id},
+            include: {
+                incomingTransfers: true,
+                outgoingTransfers: true
+            }
         })
     }
 
