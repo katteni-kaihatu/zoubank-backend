@@ -1,7 +1,7 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {importSPKI, jwtVerify, KeyLike} from "jose"
 
-const APP_AUDIENCE = "zoubank.resonite.love"
+const APP_AUDIENCE = "http://localhost:3001"
 
 @Injectable()
 export class JwtService {
