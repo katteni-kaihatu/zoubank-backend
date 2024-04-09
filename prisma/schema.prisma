@@ -13,9 +13,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  BOT
+  ADMIN
+}
+
 model User {
-  id             String @id @default(cuid())
-  resoniteUserId String @unique
+  id             String   @id @default(cuid())
+  resoniteUserId String   @unique
+  role           UserRole @default(USER)
 
   balance Decimal @default(0.0)
 
