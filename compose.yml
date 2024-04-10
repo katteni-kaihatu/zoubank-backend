@@ -13,12 +13,23 @@ services:
       test: "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"
       interval: 5s
       retries: 20
-    ports:
-      - "127.0.0.1:55432:5432"
   redis:
     restart: always
     image: redis:6-alpine
-    ports:
-      - "127.0.0.1:6379:6379"
     volumes:
       - ./redis:/data
+  frontend:
+    image: ghcr.io/katteni-kaihatu/zoubank-frontend:latest
+    ports:
+      - "127.0.0.1:3000:3000"
+  backend:
+    image: ghcr.io/katteni-kaihatu/zoubank-backend:latest
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
+      - REDIS_URL=redis://redis:6379
+      - SESSION_SECRET=
+      - ADMIN_API_TOKEN=
+      - APP_AUDIENCE=http://zoubank.resonite.love
+    depends_on:
+      - db
+      - redis
