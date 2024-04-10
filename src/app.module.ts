@@ -6,11 +6,14 @@ import {PrismaService} from './prisma/prisma.service';
 
 import {AuthController} from './auth/auth.controller';
 import {UserController} from './user/user.controller';
+import { AdminController } from './admin/admin.controller';
+import { TransactionController } from './transaction/transaction.controller';
+import { TransactionService } from './transaction/transaction.service';
 
 @Module({
     imports: [],
-    controllers: [UserController, AuthController],
-    providers: [PrismaService, AuthService, JwtService, UserService],
+    controllers: [UserController, AuthController, AdminController, TransactionController],
+    providers: [PrismaService, AuthService, JwtService, UserService, TransactionService],
 })
 export class AppModule {
 }

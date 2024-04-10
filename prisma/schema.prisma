@@ -24,6 +24,8 @@ model User {
   resoniteUserId String   @unique
   role           UserRole @default(USER)
 
+  APITokenHash String?
+
   balance Decimal @default(0.0)
 
   branchName    String
