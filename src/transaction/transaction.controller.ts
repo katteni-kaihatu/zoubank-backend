@@ -56,7 +56,14 @@ export class TransactionController {
 
         // User取得
         const fromUser = await this.userService.getUserByResoniteUserId(fromUserId)
-        const toUser = await this.userService.getUserByResoniteUserId(toUserId)
+        let toUser = await this.userService.getUserByResoniteUserId(toUserId)
+        // もしtoUserがいなかったら、作成する
+        if(!toUser) {
+            toUser = await this.userService.createUser({
+                resoniteUserId: toUserId
+            })
+        }
+
 
         // 送金元の残高が足りない場合はエラー
         if (fromUser.balance < amount) {

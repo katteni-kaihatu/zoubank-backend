@@ -1,6 +1,7 @@
-import {Injectable} from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 import {PrismaService} from "../prisma/prisma.service";
 import {User} from "@prisma/client";
+import bcrypt from "bcrypt";
 
 function exclude<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
     const clone = {...obj}
@@ -12,8 +13,34 @@ function exclude<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
 
 @Injectable()
 export class UserService {
+    logger = new Logger(this.constructor.name)
 
     constructor(private prismaService: PrismaService) {
+        this.logger.log("UserService initialized")
+        this.prismaService.user.findUnique({
+            where: {
+                id: "ADMIN"
+            }
+        }).then(async admin => {
+            if (!admin) {
+                const AdminAPIToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
+                const AdminAPITokenHash = await bcrypt.hash(AdminAPIToken, 10)
+                await this.prismaService.user.create({
+                    data: {
+                        id: "ADMIN",
+                        resoniteUserId: "ADMIN",
+                        accountNumber: "00000000",
+                        APITokenHash: AdminAPITokenHash,
+                        branchName: "本店",
+                        role: "ADMIN",
+                        balance: 0,
+                    }
+                })
+                this.logger.log("Admin user created Token: ", AdminAPIToken)
+            } else {
+                this.logger.log("Admin user already exists")
+            }
+        })
     }
 
     async getUserById(id: User["resoniteUserId"]) {
@@ -55,6 +82,10 @@ export class UserService {
                 branchName: "本店",
                 role: "USER",
                 balance: 0,
+            },
+            include: {
+                incomingTransfers: true,
+                outgoingTransfers: true
             }
         })
         return exclude(newUser, ["APITokenHash"])
