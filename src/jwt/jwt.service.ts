@@ -1,7 +1,8 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {importSPKI, jwtVerify, KeyLike} from "jose"
+import * as process from "node:process";
 
-const APP_AUDIENCE = "http://localhost:3001"
+const APP_AUDIENCE = process.env.APP_AUDIENCE ?? "http://localhost:3000"
 
 @Injectable()
 export class JwtService {
