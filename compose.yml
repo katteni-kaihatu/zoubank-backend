@@ -20,10 +20,12 @@ services:
       - ./redis:/data
   frontend:
     image: ghcr.io/katteni-kaihatu/zoubank-frontend:latest
+    restart: always
     ports:
       - "127.0.0.1:3000:3000"
   backend:
     image: ghcr.io/katteni-kaihatu/zoubank-backend:latest
+    restart: always
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/postgres
       - REDIS_URL=redis://redis:6379
