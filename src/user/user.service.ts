@@ -1,7 +1,9 @@
 import {Injectable, Logger} from '@nestjs/common';
 import {PrismaService} from "../prisma/prisma.service";
 import {User} from "@prisma/client";
-import bcrypt from "bcrypt";
+
+import * as crypto from "node:crypto";
+import * as process from "node:process";
 
 function exclude<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
     const clone = {...obj}
@@ -17,14 +19,19 @@ export class UserService {
 
     constructor(private prismaService: PrismaService) {
         this.logger.log("UserService initialized")
+
         this.prismaService.user.findUnique({
             where: {
                 id: "ADMIN"
             }
         }).then(async admin => {
+            if(!process.env.ADMIN_API_TOKEN) {
+                this.logger.error("ADMIN_API_TOKEN is not set")
+                return
+            }
             if (!admin) {
-                const AdminAPIToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-                const AdminAPITokenHash = await bcrypt.hash(AdminAPIToken, 10)
+                const AdminAPIToken = process.env.ADMIN_API_TOKEN
+                const AdminAPITokenHash = crypto.createHash('sha256').update(AdminAPIToken).digest('hex');
                 await this.prismaService.user.create({
                     data: {
                         id: "ADMIN",

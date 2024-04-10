@@ -3,6 +3,9 @@ import {AppModule} from './app.module';
 import * as session from 'express-session';
 import * as process from "node:process";
 
+import RedisStore from "connect-redis"
+import {createClient} from "redis"
+
 declare module 'express-session' {
     interface SessionData {
         user: any
@@ -17,13 +20,23 @@ async function bootstrap() {
 
     const app = await NestFactory.create(AppModule);
     app.enableCors({
-        origin: "http://localhost:3001",
         credentials: true,
     });
+
+    let redisClient = createClient({
+        url: process.env.REDIS_URL,
+    })
+    redisClient.connect().catch(console.error)
+
+    let redisStore = new RedisStore({
+        client: redisClient,
+        prefix: "zoubank:",
+    })
 
     app.use(
         session({
             name: "zoubank-session",
+            store: redisStore,
             secret: process.env.SESSION_SECRET,
             resave: false,
             saveUninitialized: false,

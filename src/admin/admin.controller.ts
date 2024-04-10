@@ -2,7 +2,8 @@ import {Body, Controller, Post, Headers, HttpException} from '@nestjs/common';
 import {Prisma, User} from "@prisma/client";
 import {JwtService} from "../jwt/jwt.service";
 import {UserService} from "../user/user.service";
-import bcrypt from "bcrypt"
+
+import * as crypto from "node:crypto";
 
 @Controller('admin')
 export class AdminController {
@@ -16,7 +17,7 @@ export class AdminController {
         if (!APIToken) {
             throw new HttpException("Unauthorized", 401)
         }
-        const APITokenHash = await bcrypt.hash(APIToken, 10)
+        const APITokenHash = crypto.createHash('sha256').update(APIToken).digest('hex');
         const adminUser = await this.userService.findUserByAPITokenHash(APITokenHash)
         if (!adminUser) {
             throw new HttpException("Unauthorized", 401)
@@ -31,7 +32,7 @@ export class AdminController {
         }
 
         const newApiTokenRaw = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15)
-        const newApiTokenHash = await bcrypt.hash(newApiTokenRaw, 10)
+        const newApiTokenHash = crypto.createHash('sha256').update(newApiTokenRaw).digest('hex');
 
         const newUser = await this.userService.createUserAdmin({
             resoniteUserId: data.resoniteUserId,

@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {PrismaService} from "../prisma/prisma.service";
-import {User} from "@prisma/client";
+import {Prisma, User} from "@prisma/client";
 
 @Injectable()
 export class TransactionService {
@@ -10,8 +10,8 @@ export class TransactionService {
 
     async createTransaction(fromUser: Pick<User, "id" | "role">,
                       toUser: Pick<User, "id" | "role">,
-                      amount: number,
-                      externalData?: any
+                      amount: Prisma.Decimal,
+                      externalData: any
     ) {
         // トランザクションで処理する
 
