@@ -39,7 +39,7 @@ export class TransactionController {
 
         const user = sessionUser || apiUser
 
-        const fromUserId = data.senderId
+        const fromUserId = data.senderId ?? apiUser?.id
         const toUserId = data.recipientId
         const amount = new Prisma.Decimal(data.amount)
 
