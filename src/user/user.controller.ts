@@ -38,7 +38,13 @@ export class UserController {
             user = await this.userService.getUserById(userId)
         }
         if (!user) {
-            throw new HttpException("Not Found", 404)
+            // ユーザを作る
+            if(userId.startsWith("U-")) {
+                user = await this.userService.createUser({resoniteUserId: userId})
+            } else {
+                // 404
+                throw new HttpException("User not found", 404)
+            }
         }
         return user
     }
