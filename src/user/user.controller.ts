@@ -34,13 +34,12 @@ export class UserController {
         let user = null
         if(userId.startsWith("U-")) {
             user = await this.userService.getUserByResoniteUserId(userId)
+
         } else {
             user = await this.userService.getUserById(userId)
-            if(!user.id) {
-                user = null
-            }
         }
-        if (!user) {
+
+        if (!user.id) {
             // ユーザを作る
             if(userId.startsWith("U-")) {
                 user = await this.userService.createUser({resoniteUserId: userId})
