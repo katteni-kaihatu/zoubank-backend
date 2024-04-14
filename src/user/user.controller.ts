@@ -36,6 +36,9 @@ export class UserController {
             user = await this.userService.getUserByResoniteUserId(userId)
         } else {
             user = await this.userService.getUserById(userId)
+            if(!user.id) {
+                user = null
+            }
         }
         if (!user) {
             // ユーザを作る
