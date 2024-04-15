@@ -54,8 +54,24 @@ export class UserService {
         const user = await this.prismaService.user.findUnique({
             where: {id: id},
             include: {
-                incomingTransfers: true,
-                outgoingTransfers: true
+                incomingTransfers: {
+                    include: {
+                        sender: true,
+                        recipient: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
+                outgoingTransfers: {
+                    include: {
+                        sender: true,
+                        recipient: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                }
             }
         })
         return exclude(user, ["APITokenHash"])
@@ -65,9 +81,25 @@ export class UserService {
         const user = await this.prismaService.user.findUnique({
             where: {resoniteUserId: resoniteUserId},
             include: {
-                incomingTransfers: true,
-                outgoingTransfers: true
-            }
+                incomingTransfers: {
+                    include: {
+                        sender: true,
+                        recipient: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                },
+                outgoingTransfers: {
+                    include: {
+                        sender: true,
+                        recipient: true
+                    },
+                    orderBy: {
+                        createdAt: 'desc'
+                    }
+                }
+            },
         })
         return exclude(user, ["APITokenHash"])
     }
@@ -91,8 +123,19 @@ export class UserService {
                 balance: 0,
             },
             include: {
-                incomingTransfers: true,
-                outgoingTransfers: true
+                incomingTransfers: {
+                    include: {
+                        sender: true,
+                        recipient: true
+                    }
+                },
+                outgoingTransfers: {
+                    include: {
+                        sender: true,
+                        recipient: true
+                    }
+
+                }
             }
         })
         return exclude(newUser, ["APITokenHash"])

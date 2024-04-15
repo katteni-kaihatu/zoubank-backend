@@ -9,11 +9,13 @@ import {UserController} from './user/user.controller';
 import { AdminController } from './admin/admin.controller';
 import { TransactionController } from './transaction/transaction.controller';
 import { TransactionService } from './transaction/transaction.service';
+import { ProxyController } from './proxy/proxy.controller';
+import { ProxyService } from './proxy/proxy.service';
 
 @Module({
     imports: [],
-    controllers: [UserController, AuthController, AdminController, TransactionController],
-    providers: [PrismaService, AuthService, JwtService, UserService, TransactionService],
+    controllers: [UserController, AuthController, AdminController, TransactionController, ProxyController],
+    providers: [PrismaService, AuthService, JwtService, UserService, TransactionService, ProxyService],
 })
 export class AppModule {
 }
