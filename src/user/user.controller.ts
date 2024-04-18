@@ -46,7 +46,7 @@ export class UserController {
                 throw new HttpException("User not found", 404)
             }
         }
-        return user.balance
+        return Number(user.balance)
     }
 
     // ユーザー情報を取得するエンドポイント
