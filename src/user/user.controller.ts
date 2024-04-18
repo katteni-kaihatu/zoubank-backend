@@ -27,6 +27,28 @@ export class UserController {
         return this.userService.updateUser(session.user.id, data)
     }
 
+    @Get("/:userId/balance")
+    async getBalance(@Param("userId") userId: string) {
+        let user = null
+        if(userId.startsWith("U-")) {
+            user = await this.userService.getUserByResoniteUserId(userId)
+
+        } else {
+            user = await this.userService.getUserById(userId)
+        }
+
+        if (!user.id) {
+            // ユーザを作る
+            if(userId.startsWith("U-")) {
+                user = await this.userService.createUser({resoniteUserId: userId})
+            } else {
+                // 404
+                throw new HttpException("User not found", 404)
+            }
+        }
+        return user.balance
+    }
+
     // ユーザー情報を取得するエンドポイント
     // resoniteUserId または id でユーザー情報を取得する
     @Get("/:userId")
