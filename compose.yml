@@ -38,3 +38,10 @@ services:
     depends_on:
       - db
       - redis
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana-config:/etc/grafana
+      - ./victoriametrics-datasource:/var/lib/grafana/plugins/grafana-datasource
+      - ./provisioning:/etc/grafana/provisioning
