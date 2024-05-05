@@ -2,7 +2,7 @@ import {Injectable, Logger} from '@nestjs/common';
 import {importSPKI, jwtVerify, KeyLike} from "jose"
 import * as process from "node:process";
 
-const APP_AUDIENCE = process.env.APP_AUDIENCE ?? "http://localhost:3000"
+
 
 @Injectable()
 export class JwtService {
@@ -27,6 +27,8 @@ export class JwtService {
 
     // Verify the token
     async verify(token: string) {
+        const APP_AUDIENCE = process.env.APP_AUDIENCE
+        console.log("APP_AUDIENCE", APP_AUDIENCE)
         return jwtVerify(token, this.publicKey, {
             algorithms: ["EdDSA"],
             audience: APP_AUDIENCE
