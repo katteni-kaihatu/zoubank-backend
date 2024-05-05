@@ -3,6 +3,8 @@ import {AppModule} from './app.module';
 import * as session from 'express-session';
 import * as process from "node:process";
 
+import 'dotenv/config'
+
 import RedisStore from "connect-redis"
 import {createClient} from "redis"
 

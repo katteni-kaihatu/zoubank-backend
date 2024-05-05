@@ -12,7 +12,7 @@ export class JwtService {
     constructor() {
         this.getPublicKey().then(async (key) => {
             this.publicKey = await importSPKI(key, "EdDSA")
-            this.logger.log("pubkey is loaded.")
+            this.logger.log("pubkey loaded.")
         }).catch((e) => {
             this.logger.error("Failed to load pubkey", e)
         })

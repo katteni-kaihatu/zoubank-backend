@@ -22,8 +22,8 @@ docker compose up -d db redis
 
 ## 環境変数
 
-DATABSE_URL=postgresql://postgres:postgres@localhost:5432/postgres
-REDIS_URL=redis://localhost:6379
-SESSION_SECRET=secret // なんでもいい
-ADMIN_API_TOKEN=token // なんでもいい ADMINユーザのAPI　Token
-APP_AUDIENCE=http://localhost:3001 // デバッグのフロントエンドのURL
+DATABSE_URL=postgresql://postgres:postgres@localhost:5432/postgres  
+REDIS_URL=redis://localhost:6379  
+SESSION_SECRET=secret // なんでもいい  
+ADMIN_API_TOKEN=token // なんでもいい ADMINユーザのAPI　Token  
+APP_AUDIENCE=http://localhost:3001 // デバッグのフロントエンドのURL  
