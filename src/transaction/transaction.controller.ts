@@ -52,10 +52,7 @@ export class TransactionController {
             throw new HttpException("Bad Request", 400)
         }
 
-        // 送金元と送金先が同じユーザーの場合はエラー
-        if (fromUserId === toUserId) {
-            throw new HttpException("Bad Request", 400)
-        }
+
 
         // ADMINユーザー以外は自分のアカウントからの送金のみ可能
         if (user.role !== "ADMIN" && user.id !== fromUserId) {
@@ -65,6 +62,12 @@ export class TransactionController {
         // User取得
         const fromUser = await this.userService.getUserByUnknownId(fromUserId)
         let toUser = await this.userService.getUserByUnknownId(toUserId)
+
+        // 送金元と送金先が同じユーザーの場合はエラー
+        if (fromUser.id === toUser.id) {
+            throw new HttpException("Bad Request", 400)
+        }
+
         // もしtoUserがいなかったら、作成する
         if(!toUser.id) {
             this.logger.log("User not found, creating new user")
