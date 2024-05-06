@@ -75,6 +75,7 @@ export class TransactionController {
 
 
         // 送金元の残高が足りない場合はエラー
+        this.logger.log("from role", fromUser.role, "balance", fromUser.balance, "amount", amount)
         if (fromUser.role === "USER" && (fromUser.balance < amount)) {
             throw new HttpException("Not Enough Balance", 400)
         }
